@@ -25,11 +25,22 @@ public class Graph {
 		int j = e.getEnd();
 		
 		if (!exists(e)) {
-			if (edges.get(i) == null) {
-				edges.put(i, new HashMap<Integer, Edge>());
+			if (edges.get(i) != null && edges.get(j) != null) {
+				edges.get(i).put(j, e);
 			}
-			edges.get(i).put(j, e); // add the new edge
-			vertCount++;
+			else if (edges.get(i) == null && edges.get(j) != null){
+				edges.get(j).put(i, e);
+			}
+			else if (edges.get(i) == null && edges.get(j) == null) {
+				edges.put(i, new HashMap<Integer, Edge>());
+				edges.get(i).put(j, e); // add the new edge
+				vertCount++;
+			}
+			else if (edges.get(j) == null) {
+				edges.put(j, new HashMap<Integer, Edge>());
+				edges.get(j).put(i, e); // add the new edge
+				vertCount++;
+			}
 		}
 	}
 	
@@ -73,11 +84,23 @@ public class Graph {
 			return edges.get(i).get(j).getWeight();
 		}
 	}
+	public Edge getEdge(int i, int j) {
+		if (edges.get(i) != null && edges.get(i).get(j) != null) {
+			return edges.get(i).get(j);
+		}
+		else if (edges.get(j) != null && edges.get(j).get(i) != null) {
+			return edges.get(j).get(i);
+		}
+		else {
+			return null;
+		}
+	}
 	
 	public static void main(String[] args) {
 		Graph g = new Graph();
 		
 		g.addEdge(new Edge(0, 50, 1));
+		g.addEdge(new Edge(1, 51, 0));
 		g.addEdge(new Edge(0, 25, 2));
 		g.addEdge(new Edge(0, 10, 3));
 		g.addEdge(new Edge(2, 100, 3));

@@ -13,28 +13,30 @@ import java.util.Set;
 import java.util.TreeMap;
 
 public class Kruskal {
-	private final Random R = new Random();
-	private int numNodes = 0;
+	private final static Random R = new Random();
+	private static int numNodes = 0;
 	
 	public Set<Edge> kruskal(Graph g) {
-		int n = g.size();
 		List<Edge> sortedEdges = sort(g.getAllEdges());
 		HashSet<Edge> result = new HashSet<Edge>();
-		DisjointSet sets = new DisjointSet(n);
+		DisjointSet sets = new DisjointSet(numNodes);
+		Iterator i = sortedEdges.iterator();
+		Edge e;
+		int u = 0, v = 0;
 		
 		do {
-			
-		} while (result.size() < n-1);
+			e = (Edge) i.next();
+			u = e.getStart();
+			v = e.getEnd();
+			u = sets.find(u);
+			v = sets.find(v);
+			if (u != v) {
+				sets.merge(u, v);
+				result.add(e);
+			}
+		} while (result.size() < g.size()-1);
 		
 		return result;
-	}
-	
-	public HashSet<Integer> find(DisjointSet sets, int u) {
-		HashSet<Integer> ret = null;
-		
-		//TODO
-		
-		return ret;
 	}
 	
 	public List<Edge> sort(Collection<Edge> edges) {
@@ -47,13 +49,29 @@ public class Kruskal {
 		return sorted;
 	}
 	
-	public Edge genRandEdge() {
-		return new Edge(numNodes, R.nextDouble(), numNodes);
+	public static Edge genRandEdge() {
+		return new Edge(R.nextInt(numNodes), Math.floor(R.nextDouble() * 100), R.nextInt(numNodes));
+	}
+	public static void setNumNodes(int n) {
+		numNodes = n;
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		Graph g = new Graph();
+		HashSet<Edge> list;
+		Kruskal k = new Kruskal();
+		final int n = 10;
 
+		setNumNodes(n);
+		for (int i = 0; i < n; ++i) {
+			g.addEdge(genRandEdge());
+		}
+		
+		list = (HashSet<Edge>) k.kruskal(g);
+		
+		for (Edge e : list) {
+			System.out.println(e.toString());
+		}
 	}
 
 }

@@ -1,7 +1,7 @@
 package alg;
 
 
-public class Edge implements Comparable<Double> {
+public class Edge implements Comparable<Edge> {
 	private double weight;
 	private int start;
 	private int end;
@@ -22,8 +22,13 @@ public class Edge implements Comparable<Double> {
 	public int getEnd() { return end; }
 
 	@Override
-	public int compareTo(Double o) {
-		return (int) (weight - o);
+	public int compareTo(Edge o) {
+		return (int) (weight - o.weight);
+	}
+	
+	@Override
+	public String toString() {
+		return "(" + new String() + start + ", " + weight + ", "+ end + ")";
 	}
 	
 	public static void main(String[] args) {
