@@ -6,17 +6,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Random;
 import java.util.Set;
 
 public class Kruskal {
-	private final static Random R = new Random();
-	private static int numNodes = 0;
 	
-	public Set<Edge> kruskal(Graph g) {
+	public static Set<Edge> kruskal(Graph g) {
 		List<Edge> sortedEdges = sort(g.getAllEdges());
 		HashSet<Edge> result = new HashSet<Edge>();
-		DisjointSet sets = new DisjointSet(numNodes);
+		DisjointSet sets = new DisjointSet(g.size());
 		Iterator<Edge> i = sortedEdges.iterator();
 		Edge e;
 		int u = 0, v = 0;
@@ -31,12 +28,12 @@ public class Kruskal {
 				sets.merge(u, v);
 				result.add(e);
 			}
-		} while (i.hasNext() && result.size() < g.size()-1);
+		} while (result.size() < g.size()-1);
 		
 		return result;
 	}
 	
-	public List<Edge> sort(Collection<Edge> edges) {
+	public static List<Edge> sort(Collection<Edge> edges) {
 		List<Edge> sorted = new LinkedList<Edge>();
 		PriorityQueue<Edge> q = new PriorityQueue<Edge>();
 		
@@ -46,29 +43,26 @@ public class Kruskal {
 		return sorted;
 	}
 	
-	public static Edge genRandEdge() {
-		return new Edge(R.nextInt(numNodes), Math.floor(R.nextDouble() * 100), R.nextInt(numNodes));
-	}
-	public static void setNumNodes(int n) {
-		numNodes = n;
-	}
 
 	public static void main(String[] args) {
-		Graph g = new Graph();
+		long starttime = 0;
+		long endtime = 0;
 		HashSet<Edge> list;
-		Kruskal k = new Kruskal();
-		final int n = 100;
-		final double den = 0.5;
-
-		setNumNodes(n);
-		Graph.genRandEdges(n, den);
+		//Graph g = Graph.testGraph1();
 		
-		list = (HashSet<Edge>) k.kruskal(g);
+		starttime = System.currentTimeMillis();
+		Graph g = new Graph();
+		g.genRandEdges(5000, 0.3);
+		list = (HashSet<Edge>) Kruskal.kruskal(g);
+		endtime =  System.currentTimeMillis();
+		System.out.println("Total time(ms): " + (endtime - starttime));
+		/*
 		int i = 0;
 		for (Edge e : list) {
 			System.out.println(i + ": " + e.toString());
 			i++;
-		}
+		}*/
+		
 	}
 
 }

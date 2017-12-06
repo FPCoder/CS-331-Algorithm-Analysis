@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class Graph {
-	private static HashMap<Integer, HashMap<Integer, Edge>> edges;
-	private final static Random R = new Random();
-	private static int vertCount = 0;
+	private HashMap<Integer, HashMap<Integer, Edge>> edges;
+	private final Random R = new Random();
+	private int vertCount = 0;
 	
 	Graph() {
 		edges = new HashMap<Integer, HashMap<Integer, Edge>>();
@@ -22,7 +22,7 @@ public class Graph {
 		return vertCount;
 	}
 	
-	public static void addEdge(Edge e) {
+	public void addEdge(Edge e) {
 		int i = e.getStart();
 		int j = e.getEnd();
 		
@@ -41,7 +41,7 @@ public class Graph {
 		}
 	}
 	
-	public static boolean exists(Edge e) {
+	public boolean exists(Edge e) {
 		int st = e.getStart();
 		int end = e.getEnd();
 		
@@ -89,7 +89,7 @@ public class Graph {
 				return edges.get(i).get(j).getWeight();
 			}
 			else {
-				return 0;
+				return Double.POSITIVE_INFINITY;
 			}
 		}
 	}
@@ -107,26 +107,42 @@ public class Graph {
 	 * @param v number of vertices
 	 * @param density (range 0.0-1.0) chance of creating an edge
 	 */
-	public static void genRandEdges(int v, double density) {
+	public void genRandEdges(int v, double density) {
 		for (int i = 0; i < v; ++i) {
 			for (int j = 0; j < v; ++j) {
-				if (i != j && R.nextDouble() < density) {
-					addEdge(new Edge(i, R.nextDouble(), j));
+				double w = R.nextDouble();
+				if (i != j && w <= density) {
+					addEdge(new Edge(i, w, j));
 				}
 			}
 		}
 	}
 	
-	public static void main(String[] args) {
+	public static Graph testGraph1() {
 		Graph g = new Graph();
+		ArrayList<Edge> edges = new ArrayList<Edge>();
+		g.addEdge(new Edge(0, 1, 1));
+		g.addEdge(new Edge(0, 1, 2));
+		g.addEdge(new Edge(0, 1, 3));
+		g.addEdge(new Edge(1, 0, 3));
+		g.addEdge(new Edge(2, 1, 4));
 		
-		/*g.addEdge(new Edge(0, 50, 1));
-		g.addEdge(new Edge(1, 51, 0));
-		g.addEdge(new Edge(0, 25, 2));
-		g.addEdge(new Edge(0, 10, 3));
-		g.addEdge(new Edge(2, 100, 3));
-		g.addEdge(new Edge(1, 10, 3));*/
-		g.genRandEdges(5, 0.1);
-		System.out.println(g.getAllEdges());
+		for (Edge e : edges) {
+			g.addEdge(e);
+		}
+		
+		return g;
+	}
+	
+	public static void main(String[] args) {
+		Graph g = Graph.testGraph1();
+		//Graph g = new Graph();
+		//g.genRandEdges(3, 1.0);
+
+		int i = 0;
+		for (Edge e : g.getAllEdges()) {
+			System.out.println(i + ": " + e.toString());
+			i++;
+		}
 	}
 }
