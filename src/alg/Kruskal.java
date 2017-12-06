@@ -58,11 +58,10 @@ public class Kruskal {
 		HashSet<Edge> list;
 		Kruskal k = new Kruskal();
 		final int n = 100;
+		final double den = 0.5;
 
 		setNumNodes(n);
-		for (int i = 0; i < n; ++i) {
-			g.addEdge(genRandEdge());
-		}
+		Graph.genRandEdges(n, den);
 		
 		list = (HashSet<Edge>) k.kruskal(g);
 		int i = 0;
