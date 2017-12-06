@@ -57,8 +57,8 @@ public class Prim {
 		final int n = 10;
 		final double chance = 0.5;
 
-		p.setn(n);
-		g.genRandEdges(n, chance);
+		Prim.setn(n);
+		Graph.genRandEdges(n, chance);
 		
 		set = (HashSet<Edge>) p.prim(g);
 		int i = 0;

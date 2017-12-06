@@ -2,11 +2,12 @@ package alg;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class SuperMedian {
 	
 	public int median(int[] list) {
-		return select(list, (int) Math.floor(list.length/2.0));
+		return select(list, list.length/2);
 	}
 	public int select(int[] list, int selection) {
 		int n = list.length;
@@ -14,24 +15,24 @@ public class SuperMedian {
 			return adhocSelection(list, selection);
 		}
 		
-		int medSize = (int) ((n % 5 == 0) ? Math.floor(n/5.0) : Math.floor(n/5.0) + 1);
+		int medSize = ((n % 5 == 0) ? n/5 : (n/5 + 1));
 		int[] medians = new int[medSize];
 		
 		for (int i = 0; i < medSize; ++i) {
 			int end =  (5*i+4 < n) ? 5*i+4 : n-1;
-			int[] temp = Arrays.copyOfRange(list, 5*i, end);
-			medians[i] = adhocSelection(temp, (int) Math.floor(temp.length/2.0));
+			int[] temp = Arrays.copyOfRange(list, 5*i, end+1);
+			medians[i] = adhocSelection(temp, temp.length/2);
 		}
 		
-		int pivot = select(medians, (int) Math.floor(medSize/2.0));
+		int pivot = select(medians, medSize/2);
 		Tuple pq = partition(list, pivot);
 		int p = pq.left(), q = pq.right();
 		
 		if (selection < p) {
-			return select(Arrays.copyOfRange(list, 0, p-1), selection);
+			return select(Arrays.copyOfRange(list, 0, p), selection);
 		}
 		else if (selection > q) {
-			return select(Arrays.copyOfRange(list, q+1, n-1), selection-q-1);
+			return select(Arrays.copyOfRange(list, q+1, n), selection-q-1);
 		}
 		else {
 			return pivot;
@@ -84,6 +85,7 @@ public class SuperMedian {
 		}
 		if (list[0] > list[2]) {
 			int[] temp = { list[2], list[3] , list[0], list[1] };
+			list = temp;
 		}
 		int[] temp = { list[2], list[3] };
 		temp = insert(temp, list[1]);
@@ -160,16 +162,15 @@ public class SuperMedian {
 	}
 	private Tuple partition(int[] list, int pivot) {
 		int p = 0, q = -1;
-		int med = list[pivot];
 		ArrayList<Integer> leftSide = new ArrayList<Integer>();
 		ArrayList<Integer> rightSide = new ArrayList<Integer>();
 		
 		for (int i : list) {
-			if (i < med) {
+			if (i < pivot) {
 				leftSide.add(i);
 				p++; q++;
 			}
-			else if (i == med) {
+			else if (i == pivot) {
 				q++;
 			}
 			else {
@@ -180,10 +181,10 @@ public class SuperMedian {
 		for (int i = 0; i < leftSide.size(); ++i) {
 			list[i] = leftSide.get(i);
 		}
-		for (int i = 0, j = leftSide.size(); i < q-p; ++i, ++j) {
-			list[j] = med;
+		for (int i = 0, j = leftSide.size(); i <= q-p; ++i, ++j) {
+			list[j] = pivot;
 		}
-		for (int i = 0, j = leftSide.size()+(q-p); i < rightSide.size(); ++i, ++j) {
+		for (int i = 0, j = leftSide.size()+(q-p+1); i < rightSide.size(); ++i, ++j) {
 			list[j] = rightSide.get(i);
 		}
 		
@@ -191,12 +192,24 @@ public class SuperMedian {
 	}
 
 	public static void main(String[] args) {
-		int[] arr = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+		int n = 100;
+		int[] arr = new int[n];
 		
+		for(int i=0; i < arr.length; ++i) {
+			arr[i] = (new Random()).nextInt(100);
+		}
+
+		int[] oldarr = Arrays.copyOf(arr, arr.length);
+		Arrays.sort(oldarr);
+		
+
 		SuperMedian s = new SuperMedian();
 		int med = s.median(arr);
-		
-		System.out.println(med);
+		System.out.println("Super Median median:" + med);
+		System.out.println("Actual median:" + oldarr[arr.length/2]);
+
+		System.out.println(Arrays.toString(oldarr));
+		System.out.println(Arrays.toString(arr));
 	}
 
 }
