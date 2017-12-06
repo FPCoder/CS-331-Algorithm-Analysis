@@ -54,12 +54,11 @@ public class Prim {
 		Graph g = new Graph();
 		Prim p = new Prim();
 		HashSet<Edge> set;
-		final int n = 100;
+		final int n = 10;
+		final double chance = 0.5;
 
-		setn(n);
-		for (int i = 0; i < n; ++i) {
-			g.addEdge(genRandEdge());
-		}
+		p.setn(n);
+		g.genRandEdges(n, chance);
 		
 		set = (HashSet<Edge>) p.prim(g);
 		int i = 0;

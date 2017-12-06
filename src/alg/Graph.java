@@ -3,10 +3,12 @@ package alg;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Graph {
-	private HashMap<Integer, HashMap<Integer, Edge>> edges;
-	private int vertCount = 0;
+	private static HashMap<Integer, HashMap<Integer, Edge>> edges;
+	private final static Random R = new Random();
+	private static int vertCount = 0;
 	
 	Graph() {
 		edges = new HashMap<Integer, HashMap<Integer, Edge>>();
@@ -20,7 +22,7 @@ public class Graph {
 		return vertCount;
 	}
 	
-	public void addEdge(Edge e) {
+	public static void addEdge(Edge e) {
 		int i = e.getStart();
 		int j = e.getEnd();
 		
@@ -39,7 +41,7 @@ public class Graph {
 		}
 	}
 	
-	public boolean exists(Edge e) {
+	public static boolean exists(Edge e) {
 		int st = e.getStart();
 		int end = e.getEnd();
 		
@@ -100,16 +102,31 @@ public class Graph {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param v number of vertices
+	 * @param density (range 0.0-1.0) chance of creating an edge
+	 */
+	public static void genRandEdges(int v, double density) {
+		for (int i = 0; i < v; ++i) {
+			for (int j = 0; j < v; ++j) {
+				if (i != j && R.nextDouble() < density) {
+					addEdge(new Edge(i, R.nextDouble(), j));
+				}
+			}
+		}
+	}
+	
 	public static void main(String[] args) {
 		Graph g = new Graph();
 		
-		g.addEdge(new Edge(0, 50, 1));
+		/*g.addEdge(new Edge(0, 50, 1));
 		g.addEdge(new Edge(1, 51, 0));
 		g.addEdge(new Edge(0, 25, 2));
 		g.addEdge(new Edge(0, 10, 3));
 		g.addEdge(new Edge(2, 100, 3));
-		g.addEdge(new Edge(1, 10, 3));
-		
+		g.addEdge(new Edge(1, 10, 3));*/
+		g.genRandEdges(5, 0.1);
 		System.out.println(g.getAllEdges());
 	}
 }
