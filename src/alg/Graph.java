@@ -25,22 +25,17 @@ public class Graph {
 		int j = e.getEnd();
 		
 		if (!exists(e)) {
-			if (edges.get(i) != null && edges.get(j) != null) {
-				edges.get(i).put(j, e);
-			}
-			else if (edges.get(i) == null && edges.get(j) != null){
-				edges.get(j).put(i, e);
-			}
-			else if (edges.get(i) == null && edges.get(j) == null) {
+			if (edges.get(i) == null) {
 				edges.put(i, new HashMap<Integer, Edge>());
-				edges.get(i).put(j, e); // add the new edge
 				vertCount++;
 			}
-			else if (edges.get(j) == null) {
+			edges.get(i).put(j, e);
+			
+			if (edges.get(j) == null) {
 				edges.put(j, new HashMap<Integer, Edge>());
-				edges.get(j).put(i, e); // add the new edge
 				vertCount++;
 			}
+			edges.get(j).put(i, e);
 		}
 	}
 	
@@ -48,10 +43,10 @@ public class Graph {
 		int st = e.getStart();
 		int end = e.getEnd();
 		
-		if (edges.get(st) != null && edges.get(st).get(e) != null) {
+		if (edges.get(st) != null && edges.get(st).get(end) != null) {
 			return true;
 		}
-		else if (edges.get(end) != null && edges.get(end).get(e) != null) {
+		else if (edges.get(end) != null && edges.get(end).get(st) != null) {
 			return true;
 		}
 		else {
@@ -76,20 +71,29 @@ public class Graph {
 		
 		return ret;
 	}
+	
+	/**
+	 * find the edge with the given vertex values and return the weight.
+	 * @param i left vertex
+	 * @param j right vertex
+	 * @return returns the weight of the Edge, or zero if invalid range or not found
+	 */
 	public double weight(int i, int j) {
 		if (j < 0) {
 			return 0;
 		}
 		else {
-			return edges.get(i).get(j).getWeight();
+			if (edges.get(i) != null && edges.get(i).get(j) != null) {
+				return edges.get(i).get(j).getWeight();
+			}
+			else {
+				return 0;
+			}
 		}
 	}
 	public Edge getEdge(int i, int j) {
-		if (edges.get(i) != null && edges.get(i).get(j) != null) {
+		if (edges.get(i) != null) {
 			return edges.get(i).get(j);
-		}
-		else if (edges.get(j) != null && edges.get(j).get(i) != null) {
-			return edges.get(j).get(i);
 		}
 		else {
 			return null;

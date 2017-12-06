@@ -1,8 +1,6 @@
 package alg;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,7 +8,6 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Set;
-import java.util.TreeMap;
 
 public class Kruskal {
 	private final static Random R = new Random();
@@ -20,7 +17,7 @@ public class Kruskal {
 		List<Edge> sortedEdges = sort(g.getAllEdges());
 		HashSet<Edge> result = new HashSet<Edge>();
 		DisjointSet sets = new DisjointSet(numNodes);
-		Iterator i = sortedEdges.iterator();
+		Iterator<Edge> i = sortedEdges.iterator();
 		Edge e;
 		int u = 0, v = 0;
 		
@@ -34,7 +31,7 @@ public class Kruskal {
 				sets.merge(u, v);
 				result.add(e);
 			}
-		} while (result.size() < g.size()-1);
+		} while (i.hasNext() && result.size() < g.size()-1);
 		
 		return result;
 	}
@@ -60,7 +57,7 @@ public class Kruskal {
 		Graph g = new Graph();
 		HashSet<Edge> list;
 		Kruskal k = new Kruskal();
-		final int n = 10;
+		final int n = 100;
 
 		setNumNodes(n);
 		for (int i = 0; i < n; ++i) {
@@ -68,9 +65,10 @@ public class Kruskal {
 		}
 		
 		list = (HashSet<Edge>) k.kruskal(g);
-		
+		int i = 0;
 		for (Edge e : list) {
-			System.out.println(e.toString());
+			System.out.println(i + ": " + e.toString());
+			i++;
 		}
 	}
 

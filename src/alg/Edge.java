@@ -26,9 +26,23 @@ public class Edge implements Comparable<Edge> {
 		return (int) (weight - o.weight);
 	}
 	
+	public boolean equals(Edge e) {
+		int i = e.start, j = e.end;
+		
+		if (start == i && end == j) {
+			return true;
+		}
+		else if (start == j && end == i) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	@Override
 	public String toString() {
-		return "(" + new String() + start + ", " + weight + ", "+ end + ")";
+		return "(" + start + ", " + weight + ", "+ end + ")";
 	}
 	
 	public static void main(String[] args) {
