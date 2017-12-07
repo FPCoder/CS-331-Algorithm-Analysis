@@ -192,7 +192,9 @@ public class SuperMedian {
 	}
 
 	public static void main(String[] args) {
-		int n = 100;
+		long start = System.currentTimeMillis();
+		long end = 0;
+		int n = 1000000;
 		int[] arr = new int[n];
 		
 		for(int i=0; i < arr.length; ++i) {
@@ -201,15 +203,17 @@ public class SuperMedian {
 
 		int[] oldarr = Arrays.copyOf(arr, arr.length);
 		Arrays.sort(oldarr);
-		
+		end = System.currentTimeMillis();
+		System.out.println("Sort time: " + (end - start));
 
+		start = System.currentTimeMillis();
 		SuperMedian s = new SuperMedian();
 		int med = s.median(arr);
+		end = System.currentTimeMillis();
+		System.out.println("Super-Median time: " + (end - start));
+		
 		System.out.println("Super Median median:" + med);
 		System.out.println("Actual median:" + oldarr[arr.length/2]);
-
-		System.out.println(Arrays.toString(oldarr));
-		System.out.println(Arrays.toString(arr));
 	}
 
 }

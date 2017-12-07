@@ -8,10 +8,11 @@ import java.util.Random;
 public class Graph {
 	private HashMap<Integer, HashMap<Integer, Edge>> edges;
 	private final Random R = new Random();
-	private int vertCount = 0;
+	private int verts = 0;
 	
-	Graph() {
+	Graph(int n) {
 		edges = new HashMap<Integer, HashMap<Integer, Edge>>();
+		verts = n;
 	}
 	
 	/**
@@ -19,7 +20,7 @@ public class Graph {
 	 * @return int of vertices in graph
 	 */
 	public int size() {
-		return vertCount;
+		return verts;
 	}
 	
 	public void addEdge(Edge e) {
@@ -29,26 +30,18 @@ public class Graph {
 		if (!exists(e)) {
 			if (edges.get(i) == null) {
 				edges.put(i, new HashMap<Integer, Edge>());
-				vertCount++;
 			}
-			edges.get(i).put(j, e);
-			
-			if (edges.get(j) == null) {
-				edges.put(j, new HashMap<Integer, Edge>());
-				vertCount++;
-			}
-			edges.get(j).put(i, e);
+			edges.get(i).put(j, e); // add the new edge
 		}
 	}
 	
 	public boolean exists(Edge e) {
 		int st = e.getStart();
-		int end = e.getEnd();
-		
-		if (edges.get(st) != null && edges.get(st).get(end) != null) {
+		int ed = e.getEnd();
+		if (edges.get(st) != null && edges.get(st).get(ed) != null) {
 			return true;
 		}
-		else if (edges.get(end) != null && edges.get(end).get(st) != null) {
+		else if (edges.get(ed) != null && edges.get(ed).get(st) != null) {
 			return true;
 		}
 		else {
@@ -88,14 +81,20 @@ public class Graph {
 			if (edges.get(i) != null && edges.get(i).get(j) != null) {
 				return edges.get(i).get(j).getWeight();
 			}
+			else if (edges.get(j) != null && edges.get(j).get(i) != null) {
+				return edges.get(j).get(i).getWeight();
+			}
 			else {
 				return Double.POSITIVE_INFINITY;
 			}
 		}
 	}
 	public Edge getEdge(int i, int j) {
-		if (edges.get(i) != null) {
+		if (edges.get(i) != null && edges.get(i).get(j) != null) {
 			return edges.get(i).get(j);
+		}
+		else if (edges.get(j) != null) {
+			return edges.get(j).get(i); // returns null if there is no edge
 		}
 		else {
 			return null;
@@ -108,9 +107,10 @@ public class Graph {
 	 * @param density (range 0.0-1.0) chance of creating an edge
 	 */
 	public void genRandEdges(int v, double density) {
+		double w = 0;
 		for (int i = 0; i < v; ++i) {
 			for (int j = 0; j < v; ++j) {
-				double w = R.nextDouble();
+				w = R.nextDouble();
 				if (i != j && w <= density) {
 					addEdge(new Edge(i, w, j));
 				}
@@ -119,7 +119,7 @@ public class Graph {
 	}
 	
 	public static Graph testGraph1() {
-		Graph g = new Graph();
+		Graph g = new Graph(5);
 		ArrayList<Edge> edges = new ArrayList<Edge>();
 		g.addEdge(new Edge(0, 1, 1));
 		g.addEdge(new Edge(0, 1, 2));

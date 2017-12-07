@@ -47,12 +47,13 @@ public class Kruskal {
 	public static void main(String[] args) {
 		long starttime = 0;
 		long endtime = 0;
+		int n = 5000; // #of Vertices
 		HashSet<Edge> list;
 		//Graph g = Graph.testGraph1();
 		
 		starttime = System.currentTimeMillis();
-		Graph g = new Graph();
-		g.genRandEdges(5000, 0.3);
+		Graph g = new Graph(n);
+		g.genRandEdges(n, 0.3); // arg 2: DENSITY of edges
 		list = (HashSet<Edge>) Kruskal.kruskal(g);
 		endtime =  System.currentTimeMillis();
 		System.out.println("Total time(ms): " + (endtime - starttime));

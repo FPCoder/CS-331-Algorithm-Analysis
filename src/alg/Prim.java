@@ -46,10 +46,12 @@ public class Prim {
 
 	public static void main(String[] args) {
 		long starttime = System.currentTimeMillis();
+		int n = 5000;
 		//Graph g = Graph.testGraph1();
+		Graph g = new Graph(n);
+		g.genRandEdges(n, 0.8);
+		
 		HashSet<Edge> set;
-		Graph g = new Graph();
-		g.genRandEdges(100, 0.5);
 		set = (HashSet<Edge>) Prim.prim(g);
 		long endtime = System.currentTimeMillis();
 		System.out.println("Total time(ms): " + (endtime - starttime));
