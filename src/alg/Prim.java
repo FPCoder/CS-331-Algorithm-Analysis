@@ -46,10 +46,10 @@ public class Prim {
 
 	public static void main(String[] args) {
 		long starttime = System.currentTimeMillis();
-		int n = 5000;
+		int n = 1000;
 		//Graph g = Graph.testGraph1();
 		Graph g = new Graph(n);
-		g.genRandEdges(n, 0.8);
+		g.genRandEdges(n, 0.3);
 		
 		HashSet<Edge> set;
 		set = (HashSet<Edge>) Prim.prim(g);

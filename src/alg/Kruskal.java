@@ -11,7 +11,7 @@ import java.util.Set;
 public class Kruskal {
 	
 	public static Set<Edge> kruskal(Graph g) {
-		List<Edge> sortedEdges = sort(g.getAllEdges());
+		PriorityQueue<Edge> sortedEdges = g.getAllEdges();
 		HashSet<Edge> result = new HashSet<Edge>();
 		DisjointSet sets = new DisjointSet(g.size());
 		Iterator<Edge> i = sortedEdges.iterator();
@@ -33,7 +33,7 @@ public class Kruskal {
 		return result;
 	}
 	
-	public static List<Edge> sort(Collection<Edge> edges) {
+	/*public static List<Edge> sort(Collection<Edge> edges) {
 		List<Edge> sorted = new LinkedList<Edge>();
 		PriorityQueue<Edge> q = new PriorityQueue<Edge>();
 		
@@ -41,13 +41,13 @@ public class Kruskal {
 		sorted.addAll(q); // add all into a LinkedList
 		
 		return sorted;
-	}
+	}*/
 	
 
 	public static void main(String[] args) {
 		long starttime = 0;
 		long endtime = 0;
-		int n = 5000; // #of Vertices
+		int n = 1000; // #of Vertices
 		HashSet<Edge> list;
 		//Graph g = Graph.testGraph1();
 		

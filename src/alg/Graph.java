@@ -3,16 +3,20 @@ package alg;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 import java.util.Random;
 
 public class Graph {
-	private HashMap<Integer, HashMap<Integer, Edge>> edges;
+	private ArrayList<HashMap<Integer, Double>> edges;
 	private final Random R = new Random();
 	private int verts = 0;
 	
 	Graph(int n) {
-		edges = new HashMap<Integer, HashMap<Integer, Edge>>();
+		edges = new ArrayList<HashMap<Integer, Double>>(n);
 		verts = n;
+		for (int i = 0; i < n; ++i) {
+			edges.add(new HashMap<Integer, Double>());
+		}
 	}
 	
 	/**
@@ -25,13 +29,14 @@ public class Graph {
 	
 	public void addEdge(Edge e) {
 		int i = e.getStart();
+		double w = e.getWeight();
 		int j = e.getEnd();
 		
 		if (!exists(e)) {
 			if (edges.get(i) == null) {
-				edges.put(i, new HashMap<Integer, Edge>());
+				edges.set(i, new HashMap<Integer, Double>());
 			}
-			edges.get(i).put(j, e); // add the new edge
+			edges.get(i).put(j, w); // add the new edge
 		}
 	}
 	
@@ -48,19 +53,17 @@ public class Graph {
 			return false;
 		}
 	}
-	
-	public Collection<Integer> getVerts() {
-		return edges.keySet();
-	}
-	public Collection<Edge> getEdgesAdj(int i) {
+	public Collection<Double> getEdgesAdj(int i) {
 		return edges.get(i).values();
 	}
-	public Collection<Edge> getAllEdges() {
-		ArrayList<Edge> ret = new ArrayList<Edge>();
+	public PriorityQueue<Edge> getAllEdges() {
+		PriorityQueue<Edge> ret = new PriorityQueue<Edge>();
+		HashMap<Integer, Double> m;
 		
-		for (HashMap<Integer, Edge> m : edges.values()) {
-			for (Edge e : m.values()) {
-				ret.add(e);
+		for (int i = 0; i < edges.size(); ++i) {
+			m = edges.get(i);
+			for (Integer j : m.keySet())  {
+				ret.add(new Edge(i, edges.get(i).get(j), j));
 			}
 		}
 		
@@ -79,10 +82,10 @@ public class Graph {
 		}
 		else {
 			if (edges.get(i) != null && edges.get(i).get(j) != null) {
-				return edges.get(i).get(j).getWeight();
+				return edges.get(i).get(j);
 			}
 			else if (edges.get(j) != null && edges.get(j).get(i) != null) {
-				return edges.get(j).get(i).getWeight();
+				return edges.get(j).get(i);
 			}
 			else {
 				return Double.POSITIVE_INFINITY;
@@ -91,10 +94,10 @@ public class Graph {
 	}
 	public Edge getEdge(int i, int j) {
 		if (edges.get(i) != null && edges.get(i).get(j) != null) {
-			return edges.get(i).get(j);
+			return new Edge(i, edges.get(i).get(j), j);
 		}
 		else if (edges.get(j) != null) {
-			return edges.get(j).get(i); // returns null if there is no edge
+			return new Edge(i, edges.get(j).get(i), j); // returns null if there is no edge
 		}
 		else {
 			return null;
@@ -109,9 +112,9 @@ public class Graph {
 	public void genRandEdges(int v, double density) {
 		double w = 0;
 		for (int i = 0; i < v; ++i) {
-			for (int j = 0; j < v; ++j) {
+			for (int j = i + 1; j < v; ++j) {
 				w = R.nextDouble();
-				if (i != j && w <= density) {
+				if (w <= density) {
 					addEdge(new Edge(i, w, j));
 				}
 			}
@@ -126,6 +129,27 @@ public class Graph {
 		g.addEdge(new Edge(0, 1, 3));
 		g.addEdge(new Edge(1, 0, 3));
 		g.addEdge(new Edge(2, 1, 4));
+		
+		for (Edge e : edges) {
+			g.addEdge(e);
+		}
+		
+		return g;
+	}
+	
+	public static Graph testGraph2() {
+		Graph g = new Graph(10);
+		ArrayList<Edge> edges = new ArrayList<Edge>();
+		g.addEdge(new Edge(0, 1, 1));
+		g.addEdge(new Edge(0, 1, 2));
+		g.addEdge(new Edge(0, 1, 3));
+		g.addEdge(new Edge(1, 0, 3));
+		g.addEdge(new Edge(2, 1, 4));
+		g.addEdge(new Edge(4, 1, 5));
+		g.addEdge(new Edge(5, 1, 6));
+		g.addEdge(new Edge(5, 0, 7));
+		g.addEdge(new Edge(7, 1, 8));
+		g.addEdge(new Edge(8, 0, 7));
 		
 		for (Edge e : edges) {
 			g.addEdge(e);
