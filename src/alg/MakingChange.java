@@ -1,5 +1,7 @@
 package alg;
 
+import java.util.Random;
+
 public class MakingChange {
 	
 	private static int findNextCoin(int[] denom, int n, int s) {
@@ -39,14 +41,22 @@ public class MakingChange {
 	}
 
 	public static void main(String[] args) {
+		Random r = new Random();
+		long start = 0, end = 0;
 		int[] arr = { 100, 25, 10, 5, 1 };
-		int n = 476;
+		int n = 0;
 		
-		int[] result = makeChange(n, arr);
-		
-		for (int i : result) {
-			System.out.print(i + " ");
+		for (int x = 0; x < 100; ++x) {
+			start = System.currentTimeMillis();
+			n = r.nextInt();
+			int[] result = makeChange(n, arr);
+			end = System.currentTimeMillis();
+			System.out.println((end - start));
 		}
+		
+		/*for (int i : result) {
+			System.out.print(i + " ");
+		}*/
 	}
 
 }
